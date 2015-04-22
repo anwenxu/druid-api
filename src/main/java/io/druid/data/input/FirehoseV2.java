@@ -21,6 +21,10 @@ import java.io.Closeable;
 public interface FirehoseV2 extends Closeable
 {
     /**
+     * For initial start
+     * */
+    void start() throws Exception;
+    /**
      * Returns whether there are more rows to process.  This is used to indicate that another item is immediately
      * available via ##nextRow().  Thus, if the stream is still available but there are no new messages on it, this call
      * should block until a new message is available.
@@ -29,14 +33,14 @@ public interface FirehoseV2 extends Closeable
      *
      * @return true if and when there is another row available, false if the stream has dried up
      */
-    public boolean hasMore();
+    public boolean advance();
 
     /**
-     * The next row available.  Should only be called if hasMore returns true.
+     * The current row available.
      *
      * @return The next row
      */
-    public InputRow nextRow() ;
+    public InputRow currRow() ;
 
     /**
      * Returns a runnable that will "commit" everything read up to the point at which commit() is called.  This is
